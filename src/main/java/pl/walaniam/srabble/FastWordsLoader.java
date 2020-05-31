@@ -1,13 +1,12 @@
 package pl.walaniam.srabble;
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import pl.walaniam.srabble.datastructures.TransactionAware;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 @Slf4j
 public class FastWordsLoader implements WordsLoader {
@@ -15,10 +14,9 @@ public class FastWordsLoader implements WordsLoader {
     private int longestWordLength;
 
     @Override
-    public void loadWords(final InputStream wordsStream, WordsConsumer consumer,
-                          boolean toLowerCase) throws IOException {
+    public void loadWords(InputStream wordsStream, WordsConsumer consumer, boolean toLowerCase) throws IOException {
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         log.debug("Fast loading words from stream...");
 
         longestWordLength = 0;
@@ -29,7 +27,7 @@ public class FastWordsLoader implements WordsLoader {
                 ((TransactionAware) consumer).beginTransaction();
             }
 
-            br = new BufferedReader(new InputStreamReader(wordsStream, WordsLoader.ENCODING));
+            br = new BufferedReader(readWithEncoding(wordsStream));
 
             final StringBuilder wordBuffer = new StringBuilder();
             // 100kB buffer
@@ -65,6 +63,22 @@ public class FastWordsLoader implements WordsLoader {
         }
 
         log.debug("{} words loaded in {} ms", consumer.size(), System.currentTimeMillis() - start);
+    }
+
+    private Reader readWithEncoding(InputStream input) throws IOException {
+
+        BufferedInputStream bis = new BufferedInputStream(input);
+        CharsetDetector detector = new CharsetDetector();
+        detector.setText(bis);
+        CharsetMatch charsetMatch = detector.detect();
+
+        if (charsetMatch != null) {
+            log.debug("Detected charset={}", charsetMatch.getName());
+            return charsetMatch.getReader();
+        } else {
+            log.warn("Could not autodetect charset. Default to {}", WordsLoader.ENCODING);
+            return new InputStreamReader(input, WordsLoader.ENCODING);
+        }
     }
 
     private void addAndCleanBuffer(WordsConsumer consumer, StringBuilder wordBuffer) {

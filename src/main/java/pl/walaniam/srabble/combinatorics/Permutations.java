@@ -59,16 +59,13 @@ public class Permutations {
                     + " but " + matched.size() + " was found");
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug(numOfSearched + " permutations found in "
-                    + (System.currentTimeMillis() - startTime) + "ms");
-        }
+        log.debug("{} permutations found in {} ms", numOfSearched, System.currentTimeMillis() - startTime);
 
         return matched;
     }
 
-    private static void enumerateCharSequence(char[] chars, int n, int k, Set<String> matched,
-            char[] word, WordsDictionary dictionary) {
+    private static void enumerateCharSequence(char[] chars, int n, int k, Set<String> matched, char[] word,
+                                              WordsDictionary dictionary) {
 
         if (k == 0) {
             
@@ -81,10 +78,7 @@ public class Permutations {
                 if (dictionary == null) {
                     matched.add(convertToString(word, wordLength));
                 } else {
-                    
-                    final String fromDictionary = dictionary.getFromDictionary(
-                            convertToString(word, wordLength));
-                    
+                    final String fromDictionary = dictionary.getFromDictionary(convertToString(word, wordLength));
                     if (fromDictionary != null) {
                         matched.add(fromDictionary);
                     }

@@ -2,15 +2,11 @@ package pl.walaniam.srabble;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.walaniam.srabble.combinatorics.Permutations;
-import pl.walaniam.srabble.datastructures.CompactCharSequence;
-import pl.walaniam.srabble.datastructures.TransactionAware;
-import pl.walaniam.srabble.datastructures.TransactionalHashBag;
+import pl.walaniam.srabble.datastructures.HashBagDictionary;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-
-import static pl.walaniam.srabble.util.LetterGroupingUtils.groupByStartingLetter;
 
 @Slf4j
 public class Words {
@@ -25,6 +21,7 @@ public class Words {
 
     public Words(InputStream words) throws IOException {
         final WordsLoader wordsLoader = new FastWordsLoader();
+//        dictionary = new WordsDictionaryImpl();
         dictionary = new HashBagDictionary();
         try (InputStream wordsStream = new BufferedInputStream(words)) {
             wordsLoader.loadWords(wordsStream, dictionary, true);
@@ -115,64 +112,6 @@ public class Words {
      */
     public int getLongestWordLength() {
         return longestWordLength;
-    }
-
-    /**
-     * Hash bag dictionary.
-     */
-    private static class HashBagDictionary implements WordsDictionary, WordsConsumer, TransactionAware {
-
-        private final TransactionalHashBag<CompactCharSequence> bag = new TransactionalHashBag<>();
-
-        private Map<Character, List<CompactCharSequence>> byStartingLetter;
-
-        public String getFromDictionary(String word) {
-            
-            CompactCharSequence searched = new CompactCharSequence(word);
-
-            CompactCharSequence found = null;
-            Iterator<CompactCharSequence> values = bag.get(searched.hashCode());
-            if (values != null) {
-                while (values.hasNext()) {
-                    CompactCharSequence next = values.next();
-                    if (searched.equals(next)) {
-                        found = next;
-                        break;
-                    }
-                }
-            }
-            
-            return (found == null) ? null : word;
-        }
-
-        public Collection<String> getWordsStartingWith(char letter) {
-
-            if (byStartingLetter == null) {
-                byStartingLetter = groupByStartingLetter(bag.iterator(), false, CompactCharSequence.COMPARATOR);
-            }
-
-            return CompactCharSequence.asStringCollection(byStartingLetter.get(letter));
-        }
-
-        public void clear() {
-            bag.clear();
-        }
-
-        public void add(String word) {
-            bag.add(new CompactCharSequence(word));
-        }
-
-        public void beginTransaction() {
-            bag.beginTransaction();
-        }
-
-        public void commitTransaction() {
-            bag.commitTransaction();
-        }
-
-        public int size() {
-            return bag.size();
-        }
     }
 
 }

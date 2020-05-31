@@ -9,7 +9,7 @@ import java.io.InputStream;
  */
 public interface WordsLoader {
     
-    String ENCODING = "windows-1250";
+    String ENCODING = "utf-8"; //"windows-1250";
     
     /**
      * 
@@ -18,12 +18,7 @@ public interface WordsLoader {
      * @return
      * @throws IOException
      */
-    void loadWords(final InputStream wordsStream, WordsConsumer consumer, 
-            boolean toLowerCase) throws IOException;
+    void loadWords(InputStream wordsStream, WordsConsumer consumer, boolean toLowerCase) throws IOException;
 
-    /**
-     * 
-     * @return
-     */
     int getLongestWordLength();
 }
