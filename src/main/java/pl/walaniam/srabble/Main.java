@@ -1,19 +1,19 @@
 package pl.walaniam.srabble;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @Slf4j
-@Configuration
-@ComponentScan
+@SpringBootApplication
 public class Main {
     
     public static void main(String[] args) {
-        ApplicationContext appCtx = new AnnotationConfigApplicationContext(Main.class);
-        log.info("Loaded {}", appCtx);
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(Main.class);
+        builder.headless(false);
+        ConfigurableApplicationContext context = builder.run(args);
+        log.info("Loaded");
 //        for (String beanName : appCtx.getBeanDefinitionNames()) {
 //            System.out.println(beanName);
 //        }
