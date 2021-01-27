@@ -9,7 +9,6 @@ import java.util.stream.StreamSupport;
 
 public class CompactCharSequence implements ComparableCharSequence {
 
-    private static final long serialVersionUID = 1L;
     public static final Comparator<CompactCharSequence> COMPARATOR = CompactCharSequence::compareTo;
 
     private final char[] characters;

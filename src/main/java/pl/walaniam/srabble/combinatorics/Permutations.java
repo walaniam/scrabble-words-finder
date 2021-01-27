@@ -1,6 +1,7 @@
 package pl.walaniam.srabble.combinatorics;
 
 import gnu.trove.set.hash.THashSet;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pl.walaniam.srabble.WordsDictionary;
 
@@ -8,14 +9,11 @@ import java.util.Arrays;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 public class Permutations {
 
     private final int wordBufferSize;
-    
-    public Permutations(int bufferSize) {
-        this.wordBufferSize = bufferSize;
-    }
-    
+
     public Set<String> choosePermutations(String elements, final int k) {
         elements = elements.toLowerCase();
         return choosePermutations(elements.toCharArray(), k, null);
