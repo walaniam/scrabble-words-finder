@@ -36,7 +36,7 @@ public class MainFrame extends JFrame implements InitializingBean {
     private StartPanel startPanel;
     private JMenuBar menuBar;
     private Words words;
-    private boolean frameIsBusy = false;
+    private volatile boolean frameIsBusy = false;
 
     private class GlassPane extends JPanel {
 
@@ -46,12 +46,9 @@ public class MainFrame extends JFrame implements InitializingBean {
         public GlassPane() {
             progressBar = createProgressBar();
             //add(progressBar);
-            addMouseListener(new MouseAdapter() {
-            });
-            addMouseMotionListener(new MouseMotionAdapter() {
-            });
-            addKeyListener(new KeyAdapter() {
-            });
+            addMouseListener(new MouseAdapter() {});
+            addMouseMotionListener(new MouseMotionAdapter() {});
+            addKeyListener(new KeyAdapter() {});
         }
 
         private JProgressBar createProgressBar() {
@@ -96,16 +93,14 @@ public class MainFrame extends JFrame implements InitializingBean {
 
     private void customizeI18N() {
         Map<String, String> messages = I18N.getMessages("java.", true);
-        for (Map.Entry<String, String> entry : messages.entrySet()) {
-            UIManager.put(entry.getKey(), entry.getValue());
-        }
+        messages.entrySet().forEach(entry -> UIManager.put(entry.getKey(), entry.getValue()));
     }
 
     private void setLAF() {
         String os = System.getProperty("os.name");
         try {
             String laf = (os.toLowerCase().indexOf("windows") > -1)
-                    ? "com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
+                    ? "com.jgoodies.looks.windows.WindowsLookAndFeel" //"com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
                     : "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
             log.debug("Setting LAF to {} on OS {}", laf, os);
             UIManager.setLookAndFeel(laf);
@@ -189,7 +184,7 @@ public class MainFrame extends JFrame implements InitializingBean {
         getContentPane().add(this.currentPanel);
     }
 
-    public void setBusy(final boolean busy) {
+    public synchronized void setBusy(final boolean busy) {
         if (this.frameIsBusy == busy) {
             return;
         } else {

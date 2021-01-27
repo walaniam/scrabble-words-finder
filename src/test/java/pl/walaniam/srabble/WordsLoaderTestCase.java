@@ -1,17 +1,26 @@
 package pl.walaniam.srabble;
 
-import junit.framework.TestCase;
+import lombok.RequiredArgsConstructor;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-public abstract class WordsLoaderTestCase extends TestCase {
-    
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Parameterized.class)
+@RequiredArgsConstructor
+public class WordsLoaderTestCase {
+
     protected static class WordsConsumerMock implements WordsConsumer {
-        
-        private final List<String> words = new ArrayList<String>();
+
+        private final List<String> words = new ArrayList<>();
 
         public void add(String word) {
             words.add(word);
@@ -21,37 +30,34 @@ public abstract class WordsLoaderTestCase extends TestCase {
             return words.size();
         }
     }
-    
-    private WordsLoader loader;
-    
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        loader = newWordsLoader();
+
+    private final WordsLoader loader;
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> parameters() {
+        return Arrays.asList(
+                new Object[]{new FastWordsLoader()},
+                new Object[]{new DefaultWordsLoader()}
+        );
     }
-    
-    /**
-     * Create words loader.
-     * 
-     * @return
-     */
-    protected abstract WordsLoader newWordsLoader();
-    
+
+    @Test
     public void testLoadWordsFromFile() throws Exception {
         InputStream in = getClass().getResourceAsStream("words.txt");
         WordsConsumerMock consumer = new WordsConsumerMock();
         loader.loadWords(in, consumer, true);
-        
+
         assertEquals(314, consumer.size());
     }
-    
+
+    @Test
     public void testLoadSingleLineWords() throws Exception {
         String wordsLine = "aaa bbb ccc ddd ee";
-        
+
         InputStream in = new ByteArrayInputStream(wordsLine.getBytes());
         WordsConsumerMock consumer = new WordsConsumerMock();
         loader.loadWords(in, consumer, true);
-        
+
         assertEquals(5, consumer.size());
     }
 }

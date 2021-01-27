@@ -20,7 +20,8 @@ public class Words {
     }
 
     public Words(InputStream words) throws IOException {
-        final WordsLoader wordsLoader = new FastWordsLoader();
+//        WordsLoader wordsLoader = new FastWordsLoader();
+        WordsLoader wordsLoader = new DefaultWordsLoader();
 //        dictionary = new WordsDictionaryImpl();
         dictionary = new HashBagDictionary();
         try (InputStream wordsStream = new BufferedInputStream(words)) {
