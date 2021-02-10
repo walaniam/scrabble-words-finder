@@ -1,28 +1,25 @@
 package pl.walaniam.srabble.gui;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+@Component
 @Slf4j
-public class Configuration {
+public class FileConfig {
     
     public static final int FONT_SIZE_INCREMENT = 2;
     public static final String DICTIONARY_FILE_PATH = "dictionary.file.path";
-    private static final Configuration instance = new Configuration();
-    
+
     private Properties properties;
     private boolean dirty;
-    private Configuration() {}
-    
-    public static Configuration getInstance() {
-        return instance;
-    }
-    
+
     private void load() {
 
         if (properties == null) {
@@ -47,7 +44,8 @@ public class Configuration {
             }
         }
     }
-    
+
+    @PreDestroy
     public void save() {
         
         if (properties == null || !dirty) {
@@ -100,16 +98,6 @@ public class Configuration {
             file = new File(homeDir, "pl-walaniam-scrabble-config.properties");
         }
         return file;
-    }
-    
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            save();            
-        } catch (Exception e)  {
-            log.warn("Exceptin while saving in finalize", e);
-        }
-        super.finalize();
     }
 
 }

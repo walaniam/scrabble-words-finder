@@ -1,7 +1,9 @@
 package pl.walaniam.srabble.gui;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.walaniam.srabble.Words;
 import pl.walaniam.srabble.gui.actions.LoadWordsWorker;
 import pl.walaniam.srabble.gui.actions.OpenFileAction;
@@ -12,9 +14,6 @@ import pl.walaniam.srabble.gui.laf.UICustomizer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.LinkedHashSet;
@@ -29,42 +28,27 @@ public class MainFrame extends JFrame implements InitializingBean {
     private static final int FRAME_WIDTH = 450;
     private static final int FRAME_HEIGHT = 580;
 
-    private final GlassPane glassPane;
     private final Set<WordsListener> wordsListeners = new LinkedHashSet<>();
+    @Getter
+    private final FileConfig fileConfig;
+    @Getter
     private JPanel currentPanel;
+    @Getter
     private MainPanel mainPanel;
     private StartPanel startPanel;
     private JMenuBar menuBar;
+    @Getter
     private Words words;
     private volatile boolean frameIsBusy = false;
 
-    private class GlassPane extends JPanel {
-
-        private static final long serialVersionUID = 1L;
-        private final JProgressBar progressBar;
-
-        public GlassPane() {
-            progressBar = createProgressBar();
-            //add(progressBar);
-            addMouseListener(new MouseAdapter() {});
-            addMouseMotionListener(new MouseMotionAdapter() {});
-            addKeyListener(new KeyAdapter() {});
-        }
-
-        private JProgressBar createProgressBar() {
-            JProgressBar bar = new JProgressBar();
-            bar.setIndeterminate(true);
-            return bar;
-        }
-    }
-
-    public MainFrame() {
+    @Autowired
+    public MainFrame(GlassPane glassPane, FileConfig fileConfig) {
         log.debug("Initializing MainFrame...");
+        this.fileConfig = fileConfig;
 
         customizeI18N();
         setLAF();
 
-        glassPane = new GlassPane();
         setGlassPane(glassPane);
 
         initMenu();
@@ -82,10 +66,6 @@ public class MainFrame extends JFrame implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        initialize();
-    }
-
-    protected void initialize() {
         setVisible(true);
         invalidate();
         startWordsLoadingWorker();
@@ -100,7 +80,7 @@ public class MainFrame extends JFrame implements InitializingBean {
         String os = System.getProperty("os.name");
         try {
             String laf = (os.toLowerCase().indexOf("windows") > -1)
-                    ? "com.jgoodies.looks.windows.WindowsLookAndFeel" //"com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
+                    ? "com.jgoodies.looks.windows.WindowsLookAndFeel"
                     : "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
             log.debug("Setting LAF to {} on OS {}", laf, os);
             UIManager.setLookAndFeel(laf);
@@ -148,7 +128,7 @@ public class MainFrame extends JFrame implements InitializingBean {
         startPanel = new StartPanel(this);
         mainPanel = new MainPanel(this);
 
-        final String lastOpenedFile = Configuration.getInstance().getProperty(Configuration.DICTIONARY_FILE_PATH);
+        final String lastOpenedFile = fileConfig.getProperty(FileConfig.DICTIONARY_FILE_PATH);
 
         JPanel panelToAdd = startPanel;
         if (lastOpenedFile != null) {
@@ -162,7 +142,7 @@ public class MainFrame extends JFrame implements InitializingBean {
     }
 
     private void startWordsLoadingWorker() {
-        String lastOpenedFile = Configuration.getInstance().getProperty(Configuration.DICTIONARY_FILE_PATH);
+        String lastOpenedFile = fileConfig.getProperty(FileConfig.DICTIONARY_FILE_PATH);
         if (lastOpenedFile != null) {
             File lastOpenedFilePath = new File(lastOpenedFile);
             if (lastOpenedFilePath.exists() && lastOpenedFilePath.isFile()) {
@@ -170,10 +150,6 @@ public class MainFrame extends JFrame implements InitializingBean {
                 worker.startExecution();
             }
         }
-    }
-
-    public JPanel getCurrentPanel() {
-        return currentPanel;
     }
 
     public void setCurrentPanel(JPanel currentPanel) {
@@ -213,24 +189,9 @@ public class MainFrame extends JFrame implements InitializingBean {
         }
     }
 
-    /**
-     * @param words
-     */
-    public void setWords(final Words words) {
+    public void setWords(Words words) {
         this.words = words;
         fireWordsChangedEvent(new WordsChangedEvent(MainFrame.this, words));
-    }
-
-    public Words getWords() {
-        return words;
-    }
-
-    public MainPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    public StartPanel getStartPanel() {
-        return startPanel;
     }
 
     @Override
@@ -250,14 +211,8 @@ public class MainFrame extends JFrame implements InitializingBean {
         wordsListeners.add(l);
     }
 
-    public void removeWordsListener(WordsListener l) {
-        wordsListeners.remove(l);
-    }
-
     private void fireWordsChangedEvent(WordsChangedEvent e) {
-        if (log.isDebugEnabled()) {
-            log.debug("Fired WordsChangedEvent...");
-        }
+        log.debug("Fired WordsChangedEvent...");
         wordsListeners.forEach(it -> it.wordsChanged(e));
     }
 }

@@ -28,7 +28,7 @@ public class StartPanel extends JPanel {
     
     private void initComponents(MainFrame mainFrame) {
         
-        Font newFont = changeFontSize(infoLabel.getFont(), Configuration.FONT_SIZE_INCREMENT);
+        Font newFont = changeFontSize(infoLabel.getFont(), FileConfig.FONT_SIZE_INCREMENT);
         infoLabel.setFont(newFont);
         infoLabel.setText(I18N.getMessage("StartPanel.file.not.chosen"));
         infoLabel.setForeground(Color.RED);

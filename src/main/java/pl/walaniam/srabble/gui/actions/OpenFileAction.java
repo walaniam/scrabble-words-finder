@@ -66,10 +66,8 @@ public class OpenFileAction implements ActionListener {
         final int status = fileChooser.showOpenDialog(mainFrame);
         final File fileToOpen = fileChooser.getSelectedFile();
 
-        if (status == JFileChooser.APPROVE_OPTION && fileToOpen != null
-                && filter.accept(fileToOpen)) {
-            
-            final LoadWordsWorker worker = new LoadWordsWorker(mainFrame, fileToOpen);
+        if (status == JFileChooser.APPROVE_OPTION && fileToOpen != null && filter.accept(fileToOpen)) {
+            LoadWordsWorker worker = new LoadWordsWorker(mainFrame, fileToOpen, true);
             worker.startExecution();
         }
     }
