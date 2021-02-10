@@ -26,7 +26,6 @@ public class UICustomizer {
         }
         setFonts();
         setColors();
-        // setBorders();
     }
 
     private static void setFonts() {
@@ -76,10 +75,4 @@ public class UICustomizer {
         UIManager.put("OptionPane.questionDialog.titlePane.shadow",
                 PlasticXPLookAndFeel.getPrimaryControlShadow());
     }
-
-    /*private static void setBorders() {
-        UIManager.put("InternalFrame.border", BorderFactory.createLineBorder(
-                PlasticXPLookAndFeel.getPrimaryControlDarkShadow(), 3));
-    }*/
-
 }

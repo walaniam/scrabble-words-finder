@@ -1,9 +1,10 @@
 package pl.walaniam.srabble.gui.actions;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jdesktop.swingworker.SwingWorker;
 import pl.walaniam.srabble.Words;
-import pl.walaniam.srabble.gui.Configuration;
+import pl.walaniam.srabble.gui.FileConfig;
 import pl.walaniam.srabble.gui.MainFrame;
 import pl.walaniam.srabble.gui.i18n.I18N;
 
@@ -12,22 +13,13 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+@AllArgsConstructor
 @Slf4j
 public class LoadWordsWorker extends SwingWorker<Words, Object> {
 
-    private final File fileToOpen;
     private final MainFrame mainFrame;
+    private final File fileToOpen;
     private final boolean saveConfig;
-    
-    public LoadWordsWorker(MainFrame frame, File fileToOpen) {
-        this(frame, fileToOpen, true);
-    }
-    
-    public LoadWordsWorker(MainFrame frame, File fileToOpen, boolean saveConfig) {
-        this.fileToOpen = fileToOpen;
-        this.mainFrame = frame;
-        this.saveConfig = saveConfig;
-    }
 
     @Override
     protected Words doInBackground() throws Exception {
@@ -47,8 +39,7 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
     @Override
     protected void done() {
         try {
-            mainFrame.getMainPanel().setFooterText(
-                    I18N.getMessage("WordsLoaderThread.opening.progress"));
+            mainFrame.getMainPanel().setFooterText(I18N.getMessage("WordsLoaderThread.opening.progress"));
             mainFrame.invalidate();
 
             final Words words = get();
@@ -60,12 +51,12 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
             }
 
             if (saveConfig) {
-                Configuration.getInstance().setProperty(Configuration.DICTIONARY_FILE_PATH,
-                        fileToOpen.getAbsolutePath());
-                Configuration.getInstance().save();
+                FileConfig fileConfig = mainFrame.getFileConfig();;
+                fileConfig.setProperty(FileConfig.DICTIONARY_FILE_PATH, fileToOpen.getAbsolutePath());
+                fileConfig.save();
             }
 
-            final String footerText = I18N.getMessage("WordsLoaderThread.words.num", NumberFormat
+            String footerText = I18N.getMessage("WordsLoaderThread.words.num", NumberFormat
                     .getIntegerInstance(new Locale("pl")).format(words.getWordsCount()));
             mainFrame.getMainPanel().setFooterText(footerText);
             mainFrame.getMainPanel().handleClean();

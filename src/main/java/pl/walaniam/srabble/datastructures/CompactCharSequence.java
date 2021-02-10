@@ -1,12 +1,14 @@
 package pl.walaniam.srabble.datastructures;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
+@EqualsAndHashCode
 public class CompactCharSequence implements ComparableCharSequence {
 
     public static final Comparator<CompactCharSequence> COMPARATOR = CompactCharSequence::compareTo;
@@ -20,10 +22,6 @@ public class CompactCharSequence implements ComparableCharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        if (start < 0 || end >= characters.length) {
-            throw new IllegalArgumentException("Illegal range " + start + "-"
-                    + end + " for sequence of length " + characters.length);
-        }
         throw new UnsupportedOperationException();
     }
 
@@ -33,7 +31,6 @@ public class CompactCharSequence implements ComparableCharSequence {
             throw new StringIndexOutOfBoundsException("Invalid index " + index
                     + " length " + characters.length);
         }
-
         return characters[index];
     }
 
@@ -48,47 +45,8 @@ public class CompactCharSequence implements ComparableCharSequence {
     }
 
     @Override
-    public int hashCode() {
-        int h = hash;
-        if (h == 0) {
-            int off = 0;
-            char val[] = characters;
-            int len = characters.length;
-
-            for (int i = 0; i < len; i++) {
-                h = 31 * h + val[off++];
-            }
-            hash = h;
-        }
-        return h;
-    }
-
-    @Override
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
-            return true;
-        }
-        if (anObject instanceof CompactCharSequence) {
-            CompactCharSequence that = (CompactCharSequence) anObject;
-            int n = characters.length;
-            if (n == that.characters.length) {
-                char v1[] = characters;
-                char v2[] = that.characters;
-                int i = 0;
-                int j = 0;
-                while (n-- != 0) {
-                    if (v1[i++] != v2[j++])
-                        return false;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public int compareTo(ComparableCharSequence o) {
-        
+
         char v1[] = characters;
         char v2[] = ((CompactCharSequence) o).characters;
 

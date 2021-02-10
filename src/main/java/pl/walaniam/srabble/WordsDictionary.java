@@ -1,10 +1,8 @@
 package pl.walaniam.srabble;
 
-import pl.walaniam.srabble.datastructures.Clearable;
-
 import java.util.Collection;
 
-public interface WordsDictionary extends Clearable, WordsConsumer {
+public interface WordsDictionary extends WordsConsumer {
     /**
      * Get the word from dictionary.
      * 

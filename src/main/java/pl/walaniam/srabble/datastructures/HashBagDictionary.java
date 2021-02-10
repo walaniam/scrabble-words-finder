@@ -46,10 +46,6 @@ public class HashBagDictionary implements WordsDictionary, TransactionAware {
         return CompactCharSequence.asStringCollection(byStartingLetter.get(letter));
     }
 
-    public void clear() {
-        bag.clear();
-    }
-
     public void add(String word) {
         bag.add(new CompactCharSequence(word));
     }

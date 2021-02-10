@@ -1,16 +1,16 @@
 package pl.walaniam.srabble.gui.i18n;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.text.MessageFormat;
 import java.util.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class I18N {
     
-    public static final Locale DEFAULT_LOCALE = new Locale("pl");
-    
+    private static final Locale DEFAULT_LOCALE = new Locale("pl");
     private static final ResourceBundle bundle = ResourceBundle.getBundle("messages", DEFAULT_LOCALE);
-    
-    private I18N() {
-    }
     
     /**
      * 
@@ -20,8 +20,7 @@ public class I18N {
      */
     public static String getMessage(String key, Object[] replacements) {
 
-        String message = null;
-
+        String message;
         try {
             message = bundle.getString(key);
 

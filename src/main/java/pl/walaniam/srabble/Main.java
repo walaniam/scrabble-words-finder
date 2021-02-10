@@ -13,9 +13,6 @@ public class Main {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(Main.class);
         builder.headless(false);
         ConfigurableApplicationContext context = builder.run(args);
-        log.info("Loaded");
-//        for (String beanName : appCtx.getBeanDefinitionNames()) {
-//            System.out.println(beanName);
-//        }
+        log.info("Loaded {}", context);
     }
 }

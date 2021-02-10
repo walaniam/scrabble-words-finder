@@ -7,8 +7,12 @@ import java.awt.*;
 public class FrameUtils {
     
     public static void center(Window window) {
-        Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+
+        Rectangle bounds = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration()
+                .getBounds();
 
         int xLocation = bounds.x + (bounds.width - window.getWidth()) / 2;
         int yLocation = bounds.y + (bounds.height - window.getHeight()) / 2;
@@ -22,11 +26,11 @@ public class FrameUtils {
     }
     
     public static Font changeFontSize(Font font, int increment) {
-        
-        Font newFont = new Font(font.getName(), Font.PLAIN, font.getSize()
-                + Configuration.FONT_SIZE_INCREMENT);        
-        
-        return newFont;
+        return new Font(
+                font.getName(),
+                Font.PLAIN,
+                font.getSize() + increment
+        );
     }
     
     /**
@@ -37,15 +41,18 @@ public class FrameUtils {
      */
     public static boolean showConfirmDialog(Component parent, String message) {
         
-        int result = JOptionPane.showOptionDialog(parent, message, "",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                new String[] { "Tak", "Nie" }, "Nie");
-        
-        if (result == JOptionPane.YES_OPTION) {
-            return true;
-        } else {
-            return false;
-        }
+        int result = JOptionPane.showOptionDialog(
+                parent,
+                message,
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[] { "Tak", "Nie" },
+                "Nie"
+        );
+
+        return result == JOptionPane.YES_OPTION;
     }
 
 }

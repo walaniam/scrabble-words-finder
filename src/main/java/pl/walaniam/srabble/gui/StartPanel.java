@@ -7,6 +7,8 @@ import pl.walaniam.srabble.gui.i18n.I18N;
 import javax.swing.*;
 import java.awt.*;
 
+import static pl.walaniam.srabble.gui.FrameUtils.changeFontSize;
+
 @Slf4j
 public class StartPanel extends JPanel {
     
@@ -26,8 +28,7 @@ public class StartPanel extends JPanel {
     
     private void initComponents(MainFrame mainFrame) {
         
-        Font newFont = FrameUtils.changeFontSize(infoLabel.getFont(),
-                Configuration.FONT_SIZE_INCREMENT);        
+        Font newFont = changeFontSize(infoLabel.getFont(), FileConfig.FONT_SIZE_INCREMENT);
         infoLabel.setFont(newFont);
         infoLabel.setText(I18N.getMessage("StartPanel.file.not.chosen"));
         infoLabel.setForeground(Color.RED);
@@ -48,5 +49,4 @@ public class StartPanel extends JPanel {
         c.gridy = 1;
         add(button, c);        
     }
-    
 }

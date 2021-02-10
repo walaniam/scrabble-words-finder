@@ -5,7 +5,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.*;
 
-public class HashBag<V> implements Clearable {
+public class HashBag<V> {
     
     private final Iterator<V> emptyIterator = new Iterator<V>() {
 
@@ -60,16 +60,8 @@ public class HashBag<V> implements Clearable {
         }
     }
     
-    /**
-     * 
-     * @return size after invoking this method
-     */
     protected int increaseSize() {
         return ++size;        
-    }
-    
-    public void addAll(Collection<V> values) {
-        values.forEach(this::add);
     }
     
     public Iterator<V> get(int hash) {
@@ -92,12 +84,6 @@ public class HashBag<V> implements Clearable {
         return new BagIterator<V>(map);
     }
 
-    @Override
-    public void clear() {
-        map.clear();
-        size = 0;
-    }
-    
     public int size() {
         return size;
     }
@@ -110,7 +96,6 @@ public class HashBag<V> implements Clearable {
     protected TIntObjectHashMap getBackingMap() {
         return map;
     }
-
 
     private static class SingleElementIterator<E> implements Iterator<E> {
         
