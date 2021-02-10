@@ -62,12 +62,4 @@ public class WordsTestCase {
         assertTrue(matched.contains("lica"));
         assertTrue(matched.contains("lico"));
     }
-
-    @Test
-    public void testCleanWords() throws Exception {
-        Words words = new Words(new ByteArrayInputStream(TEST_WORDS.getBytes()));
-        assertEquals(13, words.getWordsCount());
-        words.clear();
-        assertEquals(0, words.getWordsCount());
-    }
 }

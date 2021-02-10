@@ -98,14 +98,6 @@ public class Words {
     }
 
     /**
-     * Clear this object
-     */
-    public void clear() {
-        dictionary.clear();
-        System.gc();
-    }
-
-    /**
      * Get the longest word length
      * 
      * @return
