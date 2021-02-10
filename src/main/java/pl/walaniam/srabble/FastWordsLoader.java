@@ -9,11 +9,12 @@ import pl.walaniam.srabble.datastructures.TransactionAware;
 import java.io.*;
 
 @Slf4j
-public class FastWordsLoader implements WordsLoader {
+public class FastWordsLoader {
+
+    public static final String ENCODING = "utf-8"; //"windows-1250";
 
     private int longestWordLength;
 
-    @Override
     public void loadWords(InputStream wordsStream, WordsConsumer consumer, boolean toLowerCase) throws IOException {
 
         final long start = System.currentTimeMillis();
@@ -76,8 +77,8 @@ public class FastWordsLoader implements WordsLoader {
             log.debug("Detected charset={}", charsetMatch.getName());
             return charsetMatch.getReader();
         } else {
-            log.warn("Could not autodetect charset. Default to {}", WordsLoader.ENCODING);
-            return new InputStreamReader(input, WordsLoader.ENCODING);
+            log.warn("Could not autodetect charset. Default to {}", ENCODING);
+            return new InputStreamReader(input, ENCODING);
         }
     }
 
@@ -90,7 +91,6 @@ public class FastWordsLoader implements WordsLoader {
         }
     }
 
-    @Override
     public int getLongestWordLength() {
         return longestWordLength;
     }

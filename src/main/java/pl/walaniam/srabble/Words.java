@@ -11,19 +11,16 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class Words {
 
-    private final int longestWordLength;
+    private final WordsDictionary dictionary = new HashBagDictionary();
     private final Permutations permutations;
-    private final WordsDictionary dictionary;
-    
+    private final int longestWordLength;
+
     public Words(File input) throws IOException {
         this(new FileInputStream(input));
     }
 
     public Words(InputStream words) throws IOException {
-//        WordsLoader wordsLoader = new FastWordsLoader();
-        WordsLoader wordsLoader = new DefaultWordsLoader();
-//        dictionary = new WordsDictionaryImpl();
-        dictionary = new HashBagDictionary();
+        FastWordsLoader wordsLoader = new FastWordsLoader();
         try (InputStream wordsStream = new BufferedInputStream(words)) {
             wordsLoader.loadWords(wordsStream, dictionary, true);
             longestWordLength = wordsLoader.getLongestWordLength();
@@ -36,7 +33,7 @@ public class Words {
         long startTime = System.currentTimeMillis();
         log.debug("Searching matching words for letters: {}", letters);
 
-        final Set<String> allMatched = new HashSet<>();
+        final Set<String> result = new HashSet<>();
 
         if (wordLength == null) {
             List<CompletableFuture<Set<String>>> futures = new ArrayList<>();
@@ -46,18 +43,20 @@ public class Words {
                         () -> permutations.matchWithPermutations(letters, permutationLength, dictionary))
                 );
             }
-            CompletableFuture.allOf(futures.stream().toArray(size -> new CompletableFuture[size])).join();
+            CompletableFuture
+                    .allOf(futures.stream().toArray(size -> new CompletableFuture[size]))
+                    .join();
             futures.stream()
                     .map(CompletableFuture::join)
-                    .forEach(allMatched::addAll);
+                    .forEach(result::addAll);
         } else {
             Set<String> matched = permutations.matchWithPermutations(letters, wordLength, dictionary);
-            allMatched.addAll(matched);
+            result.addAll(matched);
         }
 
-        log.debug("{} words found in {} ms", allMatched.size(), System.currentTimeMillis() - startTime);
+        log.debug("{} words found in {} ms", result.size(), System.currentTimeMillis() - startTime);
 
-        return allMatched;
+        return result;
     }
 
     public List<String> findStartingWith(String prefix, Integer wordLength) {
@@ -65,17 +64,17 @@ public class Words {
         final long startTime = System.currentTimeMillis();
         log.debug("Searching words starting with: {}", prefix);
 
-        final List<String> matchedWords = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
         final char c = prefix.charAt(0);
         final int prefixLength = prefix.length();
 
         final Collection<String> startingWithWords = dictionary.getWordsStartingWith(c);
         if (startingWithWords != null) {
             for (String word : startingWithWords) {
-                final int currentLength = word.length();
+                int currentLength = word.length();
                 if (word.startsWith(prefix)
                         && (wordLength == null || (wordLength != null && currentLength == wordLength))) {
-                    matchedWords.add(word);
+                    result.add(word);
                 }
                 if (currentLength >= prefixLength
                         && word.substring(0, prefixLength).compareTo(prefix) > 0) {
@@ -84,9 +83,9 @@ public class Words {
             }
         }
 
-        log.debug("{} found in {} ms", matchedWords.size(), System.currentTimeMillis() - startTime);
+        log.debug("{} found in {} ms", result.size(), System.currentTimeMillis() - startTime);
 
-        return matchedWords;
+        return result;
     }
 
     /**

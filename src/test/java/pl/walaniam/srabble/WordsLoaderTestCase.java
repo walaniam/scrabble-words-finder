@@ -1,21 +1,14 @@
 package pl.walaniam.srabble;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(Parameterized.class)
-@RequiredArgsConstructor
 public class WordsLoaderTestCase {
 
     protected static class WordsConsumerMock implements WordsConsumer {
@@ -31,15 +24,7 @@ public class WordsLoaderTestCase {
         }
     }
 
-    private final WordsLoader loader;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> parameters() {
-        return Arrays.asList(
-                new Object[]{new FastWordsLoader()},
-                new Object[]{new DefaultWordsLoader()}
-        );
-    }
+    private final FastWordsLoader loader = new FastWordsLoader();
 
     @Test
     public void testLoadWordsFromFile() throws Exception {

@@ -14,19 +14,14 @@ public class Permutations {
 
     private final int wordBufferSize;
 
-    public Set<String> choosePermutations(String elements, final int k) {
-        elements = elements.toLowerCase();
-        return choosePermutations(elements.toCharArray(), k, null);
-    }
-    
     public Set<String> matchWithPermutations(String elements, int k, WordsDictionary dictionary) {
         if (dictionary == null) {
-            throw new IllegalArgumentException("Dictionary is null");
+            throw new IllegalArgumentException("dictionary is null");
         }
         elements = elements.toLowerCase();
         return choosePermutations(elements.toCharArray(), k, dictionary);
     }
-    
+
     private Set<String> choosePermutations(char[] chars, int k, WordsDictionary dictionary) {
 
         final long startTime = System.currentTimeMillis();
@@ -43,13 +38,13 @@ public class Permutations {
         final int numOfSearched = (int) (factorial(n) / (factorial(n - k)));
 
         final Set<String> matched = new THashSet<>();
-        
+
         if (log.isDebugEnabled()) {
             log.debug("Enumerating char sequence. Chars: "
                     + Arrays.toString(chars) + ", wordsBuffer size: "
                     + wordBufferSize);
         }
-        
+
         enumerateCharSequence(chars, n, k, matched, new char[wordBufferSize], dictionary);
 
         if (dictionary == null && numOfSearched != matched.size()) {
@@ -62,11 +57,11 @@ public class Permutations {
         return matched;
     }
 
-    private static void enumerateCharSequence(char[] chars, int n, int k, Set<String> matched, char[] word,
-                                              WordsDictionary dictionary) {
+    private static void enumerateCharSequence(char[] chars, int n, int k, Set<String> matched,
+                                              char[] word, WordsDictionary dictionary) {
 
         if (k == 0) {
-            
+
             int wordLength = 0;
             for (int i = n; i < chars.length; i++) {
                 word[wordLength++] = chars[i];
@@ -91,10 +86,10 @@ public class Permutations {
             swap(chars, i, n - 1);
         }
     }
-    
+
     /**
      * Copy "size" chars to new String
-     * 
+     *
      * @param chars
      * @param size
      * @return
@@ -115,25 +110,20 @@ public class Permutations {
         chars[i] = chars[j];
         chars[j] = temp;
     }
-    
-    /**
-     * Silnia ;)
-     * 
-     * @param n
-     * @return
-     */
+
     public static long factorial(final int n) {
-        
-        int nCopy = n; 
-        
-        if (nCopy < 0) {
+
+        if (n < 0) {
             throw new IllegalArgumentException("n < 0");
         }
+
+        int nCopy = n;
         long factorial = 1;
-        
-        while(nCopy > 0) {
+
+        while (nCopy > 0) {
             factorial = factorial * nCopy--;
         }
+
         return factorial;
     }
 
