@@ -109,9 +109,11 @@ public class MainFrame extends JFrame implements InitializingBean {
         about.addActionListener(e -> {
             JDialog aboutDialog = new JDialog(MainFrame.this);
             aboutDialog.setModal(true);
-            aboutDialog.setSize(150, 150);
-            aboutDialog.setPreferredSize(new Dimension(150, 150));
+            aboutDialog.setSize(250, 150);
+            aboutDialog.setPreferredSize(new Dimension(250, 150));
             aboutDialog.setResizable(false);
+            aboutDialog.setTitle(I18N.getMessage("MainFrame.menu.help.about"));
+            aboutDialog.add(new JLabel("  Program dla ulatwienia gry w scrabble"));
             FrameUtils.center(aboutDialog);
             aboutDialog.setVisible(true);
         });
