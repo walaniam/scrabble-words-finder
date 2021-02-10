@@ -20,7 +20,7 @@ public class Words {
     }
 
     public Words(InputStream words) throws IOException {
-        FastWordsLoader wordsLoader = new FastWordsLoader();
+        WordsLoader wordsLoader = new WordsLoader();
         try (InputStream wordsStream = new BufferedInputStream(words)) {
             wordsLoader.loadWords(wordsStream, dictionary, true);
             longestWordLength = wordsLoader.getLongestWordLength();

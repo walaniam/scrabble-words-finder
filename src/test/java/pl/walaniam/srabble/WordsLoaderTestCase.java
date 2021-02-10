@@ -24,7 +24,7 @@ public class WordsLoaderTestCase {
         }
     }
 
-    private final FastWordsLoader loader = new FastWordsLoader();
+    private final WordsLoader loader = new WordsLoader();
 
     @Test
     public void testLoadWordsFromFile() throws Exception {

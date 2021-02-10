@@ -9,7 +9,7 @@ import pl.walaniam.srabble.datastructures.TransactionAware;
 import java.io.*;
 
 @Slf4j
-public class FastWordsLoader {
+public class WordsLoader {
 
     public static final String ENCODING = "utf-8"; //"windows-1250";
 
