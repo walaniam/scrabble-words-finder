@@ -12,41 +12,44 @@ import static pl.walaniam.srabble.gui.FrameUtils.changeFontSize;
 @Slf4j
 public class StartPanel extends JPanel {
     
-    private JLabel infoLabel = new JLabel();
-    private JButton button;
+    private final JLabel infoLabel;
+    private final JButton button;
     
-    StartPanel(MainFrame mainFrame) {
-        
+    public StartPanel(OpenFileAction openFileAction) {
         log.debug("Initializing StartPanel...");
-
         setLayout(new GridBagLayout());
-        initComponents(mainFrame);
-        layoutComponents();
-        
-        log.debug("Initialized StartPanel");
+        this.infoLabel = infoLabelOf();
+        this.button = openFileButtonOf(openFileAction);
     }
-    
-    private void initComponents(MainFrame mainFrame) {
-        
-        Font newFont = changeFontSize(infoLabel.getFont(), FileConfig.FONT_SIZE_INCREMENT);
-        infoLabel.setFont(newFont);
+
+    private JLabel infoLabelOf() {
+
+        JLabel infoLabel = new JLabel();
+        infoLabel.setFont(
+                changeFontSize(infoLabel.getFont(), FileConfig.FONT_SIZE_INCREMENT)
+        );
         infoLabel.setText(I18N.getMessage("StartPanel.file.not.chosen"));
         infoLabel.setForeground(Color.RED);
-        
-        button = new JButton(I18N.getMessage("StartPanel.open.file"));
-        button.addActionListener(new OpenFileAction(mainFrame));
-    }
-    
-    private void layoutComponents() {
-        GridBagConstraints c = new GridBagConstraints();      
+
+        GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         c.insets = new Insets(0, 0, 10, 0);
         add(infoLabel, c);
-        
-        c = new GridBagConstraints();
+
+        return infoLabel;
+    }
+
+    private JButton openFileButtonOf(OpenFileAction action) {
+
+        JButton button = new JButton(I18N.getMessage("StartPanel.open.file"));
+        button.addActionListener(action);
+
+        GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 1;
-        add(button, c);        
+        add(button, c);
+
+        return button;
     }
 }

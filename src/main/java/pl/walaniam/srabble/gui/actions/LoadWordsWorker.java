@@ -23,19 +23,12 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
 
     @Override
     protected Words doInBackground() throws Exception {
-        
-        if (log.isDebugEnabled()) {
-            log.debug("START doInBackground");
-            log.debug("File is: " + fileToOpen.getAbsolutePath());
-        }
-        
-        final Words words = new Words(fileToOpen);
-        
+        log.debug("START doInBackground for file {}", fileToOpen);
+        Words words = new Words(fileToOpen);
         log.debug("END doInBackground");
-
         return words;
     }
-    
+
     @Override
     protected void done() {
         try {
@@ -51,7 +44,8 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
             }
 
             if (saveConfig) {
-                FileConfig fileConfig = mainFrame.getFileConfig();;
+                FileConfig fileConfig = mainFrame.getFileConfig();
+                ;
                 fileConfig.setProperty(FileConfig.DICTIONARY_FILE_PATH, fileToOpen.getAbsolutePath());
                 fileConfig.save();
             }
@@ -65,13 +59,12 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
             log.error("Exception while opening " + fileToOpen, e);
         } finally {
             mainFrame.setBusy(false);
-            System.gc();
         }
     }
-    
+
     public void startExecution() {
-        mainFrame.setBusy(true);        
+        mainFrame.setBusy(true);
         execute();
     }
-    
+
 }

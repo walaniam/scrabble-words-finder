@@ -8,7 +8,7 @@ import pl.walaniam.srabble.Words;
 import pl.walaniam.srabble.gui.actions.LoadWordsWorker;
 import pl.walaniam.srabble.gui.actions.OpenFileAction;
 import pl.walaniam.srabble.gui.actions.WordsChangedEvent;
-import pl.walaniam.srabble.gui.actions.WordsListener;
+import pl.walaniam.srabble.gui.layout.WordsListener;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.laf.UICustomizer;
 
@@ -19,6 +19,9 @@ import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.disposingActionOf;
+import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.openFileActionOf;
 
 @org.springframework.stereotype.Component
 @Slf4j
@@ -51,8 +54,10 @@ public class MainFrame extends JFrame implements InitializingBean {
 
         setGlassPane(glassPane);
 
-        initMenu();
-        initFrameComponents();
+        OpenFileAction openFileAction = openFileActionOf(this);
+
+        initMenu(openFileAction);
+        initFrameComponents(openFileAction);
 
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setTitle(I18N.getMessage("MainFrame.title"));
@@ -90,18 +95,16 @@ public class MainFrame extends JFrame implements InitializingBean {
         }
     }
 
-    private void initMenu() {
+    private void initMenu(OpenFileAction openFileAction) {
+
         JMenu fileMenu = new JMenu(I18N.getMessage("MainFrame.menu.file"));
         JMenuItem openFile = new JMenuItem(I18N.getMessage("MainFrame.menu.file.open"));
-        openFile.addActionListener(new OpenFileAction(this));
+        openFile.addActionListener(openFileAction);
         fileMenu.add(openFile);
         fileMenu.addSeparator();
 
         JMenuItem close = new JMenuItem(I18N.getMessage("MainFrame.menu.file.close"));
-        close.addActionListener(e -> {
-            log.debug("Disposing MainFrame...");
-            MainFrame.this.dispose();
-        });
+        close.addActionListener(disposingActionOf(this));
         fileMenu.add(close);
 
         JMenu helpMenu = new JMenu(I18N.getMessage("MainFrame.menu.help"));
@@ -125,22 +128,22 @@ public class MainFrame extends JFrame implements InitializingBean {
         setJMenuBar(menuBar);
     }
 
-    private void initFrameComponents() {
+    private void initFrameComponents(OpenFileAction openFileAction) {
 
-        startPanel = new StartPanel(this);
+        startPanel = new StartPanel(openFileAction);
         mainPanel = new MainPanel(this);
 
         final String lastOpenedFile = fileConfig.getProperty(FileConfig.DICTIONARY_FILE_PATH);
 
-        JPanel panelToAdd = startPanel;
+        JPanel currentPanel = startPanel;
         if (lastOpenedFile != null) {
             File lastOpenedFilePath = new File(lastOpenedFile);
             if (lastOpenedFilePath.exists() && lastOpenedFilePath.isFile()) {
-                panelToAdd = mainPanel;
+                currentPanel = mainPanel;
             }
         }
 
-        setCurrentPanel(panelToAdd);
+        setCurrentPanel(currentPanel);
     }
 
     private void startWordsLoadingWorker() {
@@ -163,9 +166,8 @@ public class MainFrame extends JFrame implements InitializingBean {
     }
 
     public synchronized void setBusy(final boolean busy) {
-        if (this.frameIsBusy == busy) {
-            return;
-        } else {
+        if (this.frameIsBusy != busy) {
+
             this.frameIsBusy = busy;
 
             Component gp = getGlassPane();

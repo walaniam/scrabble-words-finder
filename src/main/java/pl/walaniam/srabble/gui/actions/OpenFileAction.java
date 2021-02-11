@@ -1,54 +1,45 @@
 package pl.walaniam.srabble.gui.actions;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.gui.MainFrame;
 import pl.walaniam.srabble.gui.i18n.I18N;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.function.Consumer;
 
 @Slf4j
 public class OpenFileAction implements ActionListener {
-    
-    /**
-     * Words file choose
-     */
+
+    private final Component parent;
     private final JFileChooser fileChooser;
-
-    /**
-     * Text file filter
-     */
     private final FileFilter filter;
+    private final Consumer<File> fileConsumer;
 
-    /**
-     * Main frame instance
-     */
-    private final MainFrame mainFrame;
-
-    /**
-     * 
-     * @param mainFrame
-     */
-    public OpenFileAction(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    public OpenFileAction(Component parent, Consumer<File> fileConsumer) {
+        this.parent = parent;
+        this.fileConsumer = fileConsumer;
         filter = createTextFileFilter();
-        fileChooser = new JFileChooser();
+        fileChooser = createFileChooser();
+    }
+
+    private JFileChooser createFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle(I18N.getMessage("OpenFileAction.choose.file"));
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        return fileChooser;
     }
 
     private FileFilter createTextFileFilter() {
-        FileFilter filter = new FileFilter() {
+        return new FileFilter() {
             @Override
             public boolean accept(File f) {
-                return f.exists()
-                        && ((f.isFile() && f.getName().endsWith(".txt")) || f
-                                .isDirectory());
+                return f.exists() && ((f.isFile() && f.getName().endsWith(".txt")) || f.isDirectory());
             }
 
             @Override
@@ -56,19 +47,17 @@ public class OpenFileAction implements ActionListener {
                 return I18N.getMessage("OpenFileAction.txt.file");
             }
         };
-        return filter;
     }
     
     public void actionPerformed(ActionEvent event) {
         
-        log.debug("OpenFileAction performed...");
+        int status = fileChooser.showOpenDialog(parent);
+        File fileToOpen = fileChooser.getSelectedFile();
 
-        final int status = fileChooser.showOpenDialog(mainFrame);
-        final File fileToOpen = fileChooser.getSelectedFile();
+        log.debug("Opening file {}", fileToOpen);
 
         if (status == JFileChooser.APPROVE_OPTION && fileToOpen != null && filter.accept(fileToOpen)) {
-            LoadWordsWorker worker = new LoadWordsWorker(mainFrame, fileToOpen, true);
-            worker.startExecution();
+            fileConsumer.accept(fileToOpen);
         }
     }
 
