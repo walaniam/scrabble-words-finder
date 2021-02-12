@@ -1,10 +1,11 @@
 package pl.walaniam.srabble.gui.actions;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.gui.MainFrame;
+import pl.walaniam.srabble.gui.layout.MainFrame;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 @Slf4j
 public class ActionListenersFactory {

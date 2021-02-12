@@ -1,4 +1,4 @@
-package pl.walaniam.srabble.gui;
+package pl.walaniam.srabble.gui.layout;
 
 import org.springframework.stereotype.Component;
 

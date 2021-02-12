@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jdesktop.swingworker.SwingWorker;
 import pl.walaniam.srabble.Words;
 import pl.walaniam.srabble.gui.FileConfig;
-import pl.walaniam.srabble.gui.MainFrame;
+import pl.walaniam.srabble.gui.layout.MainFrame;
 import pl.walaniam.srabble.gui.i18n.I18N;
 
 import javax.swing.*;

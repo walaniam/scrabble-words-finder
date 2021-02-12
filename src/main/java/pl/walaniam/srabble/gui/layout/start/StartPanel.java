@@ -1,6 +1,7 @@
-package pl.walaniam.srabble.gui;
+package pl.walaniam.srabble.gui.layout.start;
 
 import lombok.extern.slf4j.Slf4j;
+import pl.walaniam.srabble.gui.FileConfig;
 import pl.walaniam.srabble.gui.actions.OpenFileAction;
 import pl.walaniam.srabble.gui.i18n.I18N;
 

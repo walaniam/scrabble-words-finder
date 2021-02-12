@@ -1,16 +1,19 @@
-package pl.walaniam.srabble.gui;
+package pl.walaniam.srabble.gui.layout;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.walaniam.srabble.Words;
+import pl.walaniam.srabble.gui.FileConfig;
+import pl.walaniam.srabble.gui.FrameUtils;
 import pl.walaniam.srabble.gui.actions.LoadWordsWorker;
 import pl.walaniam.srabble.gui.actions.OpenFileAction;
 import pl.walaniam.srabble.gui.actions.WordsChangedEvent;
-import pl.walaniam.srabble.gui.layout.WordsListener;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.laf.UICustomizer;
+import pl.walaniam.srabble.gui.layout.main.MainPanel;
+import pl.walaniam.srabble.gui.layout.start.StartPanel;
 
 import javax.swing.*;
 import java.awt.*;
