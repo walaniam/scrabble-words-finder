@@ -3,7 +3,7 @@ package pl.walaniam.srabble.combinatorics;
 import gnu.trove.set.hash.THashSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.WordsDictionary;
+import pl.walaniam.srabble.model.WordsDictionary;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -14,12 +14,8 @@ public class Permutations {
 
     private final int wordBufferSize;
 
-    public Set<String> matchWithPermutations(String elements, int k, WordsDictionary dictionary) {
-        if (dictionary == null) {
-            throw new IllegalArgumentException("dictionary is null");
-        }
-        elements = elements.toLowerCase();
-        return choosePermutations(elements.toCharArray(), k, dictionary);
+    public Set<String> matchWithPermutations(String letters, int k, WordsDictionary dictionary) {
+        return choosePermutations(letters.toLowerCase().toCharArray(), k, dictionary);
     }
 
     private Set<String> choosePermutations(char[] chars, int k, WordsDictionary dictionary) {
@@ -32,7 +28,7 @@ public class Permutations {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Searching " + k + " element combination from " + new String(chars));
+            log.debug("Searching {} element combination from {}", k, new String(chars));
         }
 
         final int numOfSearched = (int) (factorial(n) / (factorial(n - k)));

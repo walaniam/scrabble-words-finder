@@ -1,6 +1,6 @@
 package pl.walaniam.srabble.gui.layout;
 
-import pl.walaniam.srabble.Words;
+import pl.walaniam.srabble.model.Words;
 import pl.walaniam.srabble.gui.actions.WordsChangedEvent;
 
 import java.util.Optional;

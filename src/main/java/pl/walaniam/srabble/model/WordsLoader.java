@@ -1,4 +1,4 @@
-package pl.walaniam.srabble;
+package pl.walaniam.srabble.model;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;

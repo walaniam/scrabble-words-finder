@@ -1,6 +1,8 @@
-package pl.walaniam.srabble.datastructures;
+package pl.walaniam.srabble.model;
 
-import pl.walaniam.srabble.WordsDictionary;
+import pl.walaniam.srabble.datastructures.CompactCharSequence;
+import pl.walaniam.srabble.datastructures.TransactionAware;
+import pl.walaniam.srabble.datastructures.TransactionalHashBag;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,6 +20,7 @@ public class HashBagDictionary implements WordsDictionary, TransactionAware {
 
     private Map<Character, List<CompactCharSequence>> byStartingLetter;
 
+    @Override
     public String getFromDictionary(String word) {
 
         CompactCharSequence searched = new CompactCharSequence(word);
@@ -37,6 +40,7 @@ public class HashBagDictionary implements WordsDictionary, TransactionAware {
         return (found == null) ? null : word;
     }
 
+    @Override
     public Collection<String> getWordsStartingWith(char letter) {
 
         if (byStartingLetter == null) {
@@ -46,18 +50,22 @@ public class HashBagDictionary implements WordsDictionary, TransactionAware {
         return CompactCharSequence.asStringCollection(byStartingLetter.get(letter));
     }
 
+    @Override
     public void add(String word) {
         bag.add(new CompactCharSequence(word));
     }
 
+    @Override
     public void beginTransaction() {
         bag.beginTransaction();
     }
 
+    @Override
     public void commitTransaction() {
         bag.commitTransaction();
     }
 
+    @Override
     public int size() {
         return bag.size();
     }

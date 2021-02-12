@@ -7,21 +7,6 @@ import java.util.*;
 
 public class HashBag<V> {
     
-    private final Iterator<V> emptyIterator = new Iterator<V>() {
-
-        public boolean hasNext() {
-            return false;
-        }
-
-        public V next() {
-            throw new NoSuchElementException();
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    };
-    
     /**
      * Backing map
      */
@@ -74,7 +59,7 @@ public class HashBag<V> {
         } else if (stored != null) {
             iterator = new SingleElementIterator<>((V) stored);
         } else {
-            iterator = emptyIterator;
+            iterator = Collections.emptyIterator();
         }
         
         return iterator;

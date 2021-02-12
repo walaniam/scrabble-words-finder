@@ -1,7 +1,7 @@
 package pl.walaniam.srabble.gui.layout.main;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.Words;
+import pl.walaniam.srabble.model.Words;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.layout.DocumentListeningComboBoxModel;
 import pl.walaniam.srabble.gui.layout.LimitedLengthDocument;

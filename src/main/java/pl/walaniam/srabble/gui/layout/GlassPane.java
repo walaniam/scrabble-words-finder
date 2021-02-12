@@ -1,13 +1,10 @@
 package pl.walaniam.srabble.gui.layout;
 
-import org.springframework.stereotype.Component;
-
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
-@Component
 public class GlassPane extends JPanel {
 
     private static final long serialVersionUID = 1L;

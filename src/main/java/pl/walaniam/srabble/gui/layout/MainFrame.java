@@ -3,8 +3,6 @@ package pl.walaniam.srabble.gui.layout;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.walaniam.srabble.Words;
 import pl.walaniam.srabble.gui.FileConfig;
 import pl.walaniam.srabble.gui.FrameUtils;
 import pl.walaniam.srabble.gui.actions.LoadWordsWorker;
@@ -14,6 +12,7 @@ import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.laf.UICustomizer;
 import pl.walaniam.srabble.gui.layout.main.MainPanel;
 import pl.walaniam.srabble.gui.layout.start.StartPanel;
+import pl.walaniam.srabble.model.Words;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,6 @@ import java.util.Set;
 import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.disposingActionOf;
 import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.openFileActionOf;
 
-@org.springframework.stereotype.Component
 @Slf4j
 public class MainFrame extends JFrame implements InitializingBean {
 
@@ -47,7 +45,6 @@ public class MainFrame extends JFrame implements InitializingBean {
     private Words words;
     private volatile boolean frameIsBusy = false;
 
-    @Autowired
     public MainFrame(GlassPane glassPane, FileConfig fileConfig) {
         log.debug("Initializing MainFrame...");
         this.fileConfig = fileConfig;

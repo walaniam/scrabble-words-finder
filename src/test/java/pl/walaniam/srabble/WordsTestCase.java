@@ -1,6 +1,7 @@
 package pl.walaniam.srabble;
 
 import org.junit.Test;
+import pl.walaniam.srabble.model.Words;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;

@@ -1,8 +1,7 @@
-package pl.walaniam.srabble;
+package pl.walaniam.srabble.model;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.walaniam.srabble.combinatorics.Permutations;
-import pl.walaniam.srabble.datastructures.HashBagDictionary;
 
 import java.io.*;
 import java.util.*;
