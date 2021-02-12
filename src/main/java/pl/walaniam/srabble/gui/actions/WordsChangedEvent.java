@@ -1,7 +1,7 @@
 package pl.walaniam.srabble.gui.actions;
 
 import lombok.Getter;
-import pl.walaniam.srabble.Words;
+import pl.walaniam.srabble.model.Words;
 
 import java.util.EventObject;
 

@@ -7,7 +7,7 @@ import javax.swing.*;
 /**
  * Dynamic combo box model which can dynamically change its size
  */
-public class DynamicComboBoxModel extends DefaultComboBoxModel {
+class DynamicComboBoxModel extends DefaultComboBoxModel {
 
     private volatile int currentSize;
 

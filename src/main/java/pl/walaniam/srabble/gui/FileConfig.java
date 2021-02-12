@@ -1,7 +1,6 @@
 package pl.walaniam.srabble.gui;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -10,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-@Component
 @Slf4j
 public class FileConfig {
     

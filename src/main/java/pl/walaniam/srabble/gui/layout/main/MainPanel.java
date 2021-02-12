@@ -1,10 +1,11 @@
-package pl.walaniam.srabble.gui;
+package pl.walaniam.srabble.gui.layout.main;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.Words;
+import pl.walaniam.srabble.model.Words;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.layout.DocumentListeningComboBoxModel;
 import pl.walaniam.srabble.gui.layout.LimitedLengthDocument;
+import pl.walaniam.srabble.gui.layout.MainFrame;
 import pl.walaniam.srabble.gui.layout.WordsListeningComboBoxModel;
 
 import javax.swing.*;
@@ -12,10 +13,10 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static pl.walaniam.srabble.util.LetterGroupingUtils.groupByLength;
 
@@ -51,7 +52,7 @@ public class MainPanel extends JPanel {
      * 
      * @param mainFrame parent
      */
-    MainPanel(MainFrame mainFrame) {
+    public MainPanel(MainFrame mainFrame) {
         log.debug("Initializing MainPanel...");
         this.mainFrame = mainFrame;
         initComponents();
@@ -158,7 +159,7 @@ public class MainPanel extends JPanel {
             result = (Integer) selected;
         } else if (selected != null) {
             try {
-                result = new Integer(String.valueOf(selected));
+                result = Integer.valueOf(String.valueOf(selected));
             } catch (NumberFormatException e) {
             }
         }
@@ -195,18 +196,12 @@ public class MainPanel extends JPanel {
                 sb.append("<b>");
                 sb.append(I18N.getMessage("MainPanel.WordsPanel.n.char.words", i));
                 sb.append("</b><br>");
-
-                for (Iterator iter = nLetterWords.iterator(); iter.hasNext();) {
-                    sb.append(iter.next());
-                    if (iter.hasNext()) {
-                        sb.append(", ");
-                    }
-                }
+                sb.append(nLetterWords.stream().collect(Collectors.joining(", ")));
                 sb.append("<br><br>");
             }
         }
         
-        final String content = sb.toString();
+        String content = sb.toString();
         
         wordsPane.setText(content);
         sb.delete(0, sb.length());
@@ -232,7 +227,6 @@ public class MainPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
-        //c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(5, sideMargin, 3, 3);
         topPanel.add(lettersL, c);
         
@@ -376,7 +370,7 @@ public class MainPanel extends JPanel {
         bottomLabel.setText(text);        
     }
     
-    protected void setBusy(boolean busy) {
+    public void setBusy(boolean busy) {
         lettersTF.setEnabled(!busy);
         lettersCleanB.setEnabled(!busy);
         lettersWordLengthCB.setEnabled(!busy);
