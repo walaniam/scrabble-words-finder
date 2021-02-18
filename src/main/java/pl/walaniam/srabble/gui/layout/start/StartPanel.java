@@ -7,6 +7,11 @@ import pl.walaniam.srabble.gui.i18n.I18N;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static pl.walaniam.srabble.gui.FrameUtils.changeFontSize;
 
@@ -30,12 +35,29 @@ public class StartPanel extends JPanel {
                 changeFontSize(infoLabel.getFont(), FileConfig.FONT_SIZE_INCREMENT)
         );
         infoLabel.setText(I18N.getMessage("StartPanel.file.not.chosen"));
-        infoLabel.setForeground(Color.RED);
+        infoLabel.setForeground(Color.BLUE.darker());
+        infoLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        infoLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(I18N.getMessage("StartPanel.file.download.url")));
+                } catch (IOException | URISyntaxException ex) {
+                    JOptionPane.showMessageDialog(
+                            StartPanel.this,
+                            String.valueOf(ex),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(0, 0, 10, 0);
+        c.insets = new Insets(0, 0, 30, 0);
         add(infoLabel, c);
 
         return infoLabel;
