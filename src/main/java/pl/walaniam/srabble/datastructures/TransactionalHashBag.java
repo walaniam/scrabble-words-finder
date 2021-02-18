@@ -5,7 +5,7 @@ import java.util.List;
 
 public class TransactionalHashBag<T> extends HashBag<T> implements TransactionAware {
 
-    private boolean inTransaction = false;
+    private boolean inTransaction;
         
     /**
      * Keeps duplicated elements while transaction is opened
