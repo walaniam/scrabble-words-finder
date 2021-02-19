@@ -22,8 +22,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.disposingActionOf;
-import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.openFileActionOf;
+import static pl.walaniam.srabble.gui.actions.ActionListenersFactory.*;
+import static pl.walaniam.srabble.gui.layout.LayoutComponents.constraintsOf;
 
 @Slf4j
 public class MainFrame extends JFrame implements InitializingBean {
@@ -111,12 +111,14 @@ public class MainFrame extends JFrame implements InitializingBean {
         JMenuItem about = new JMenuItem(I18N.getMessage("MainFrame.menu.help.about"));
         about.addActionListener(e -> {
             JDialog aboutDialog = new JDialog(MainFrame.this);
+            aboutDialog.setLayout(new GridBagLayout());
             aboutDialog.setModal(true);
             aboutDialog.setSize(250, 150);
             aboutDialog.setPreferredSize(new Dimension(250, 150));
             aboutDialog.setResizable(false);
             aboutDialog.setTitle(I18N.getMessage("MainFrame.menu.help.about"));
-            aboutDialog.add(new JLabel("  Program dla ulatwienia gry w scrabble"));
+            aboutDialog.add(new JLabel("Program dla ulatwienia gry w scrabble"), constraintsOf(0, 0));
+            aboutDialog.add(downloadDictionaryLink(aboutDialog), constraintsOf(0, 1, 10, 0, 0, 0));
             FrameUtils.center(aboutDialog);
             aboutDialog.setVisible(true);
         });
@@ -126,6 +128,15 @@ public class MainFrame extends JFrame implements InitializingBean {
         menuBar.add(fileMenu);
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
+    }
+
+    private JLabel downloadDictionaryLink(Component parent) {
+        JLabel downloadLink = new JLabel();
+        downloadLink.setText("Pobierz: " + I18N.getMessage("StartPanel.file.download.url"));
+        downloadLink.setForeground(Color.BLUE.darker());
+        downloadLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        downloadLink.addMouseListener(openDictionaryDownloadPageOf(parent));
+        return downloadLink;
     }
 
     private void initFrameComponents(OpenFileAction openFileAction) {
