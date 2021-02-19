@@ -1,14 +1,12 @@
 package pl.walaniam.srabble.datastructures;
 
-import lombok.EqualsAndHashCode;
-
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@EqualsAndHashCode
 public class CompactCharSequence implements ComparableCharSequence {
 
     public static final Comparator<CompactCharSequence> COMPARATOR = CompactCharSequence::compareTo;
@@ -37,6 +35,22 @@ public class CompactCharSequence implements ComparableCharSequence {
     @Override
     public int length() {
         return characters.length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompactCharSequence that = (CompactCharSequence) o;
+        return Arrays.equals(characters, that.characters);
+    }
+
+    @Override
+    public int hashCode() {
+        if (hash == 0) {
+            hash = Arrays.hashCode(characters);
+        }
+        return hash;
     }
 
     @Override
