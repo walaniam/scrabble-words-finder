@@ -13,7 +13,7 @@ public class Main {
 
     static {
         String os = System.getProperty("os.name");
-        System.out.println("Running on: " + os);
+        log.info("Running on: " + os);
         if (!Optional.ofNullable(os).map(String::toLowerCase).orElse("").contains("windows")) {
             System.setProperty("java.awt.headless", "true");
         }
