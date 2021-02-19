@@ -44,7 +44,6 @@ public class LoadWordsWorker extends SwingWorker<Words, Object> {
 
             if (saveConfig) {
                 FileConfig fileConfig = mainFrame.getFileConfig();
-                ;
                 fileConfig.setProperty(FileConfig.DICTIONARY_FILE_PATH, fileToOpen.getAbsolutePath());
                 fileConfig.save();
             }

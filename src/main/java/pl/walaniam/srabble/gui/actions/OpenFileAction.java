@@ -54,7 +54,7 @@ public class OpenFileAction implements ActionListener {
         int status = fileChooser.showOpenDialog(parent);
         File fileToOpen = fileChooser.getSelectedFile();
 
-        log.debug("Opening file {}", fileToOpen);
+        log.info("Opening file {}", fileToOpen);
 
         if (status == JFileChooser.APPROVE_OPTION && fileToOpen != null && filter.accept(fileToOpen)) {
             fileConsumer.accept(fileToOpen);

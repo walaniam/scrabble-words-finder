@@ -28,16 +28,12 @@ public class FileConfig {
             
             if (configFile != null && configFile.exists()) {
                 
-                if (log.isDebugEnabled()) {
-                    log.debug("Loading configuration from file: "
-                            + configFile.getAbsolutePath());
-                }
-                
+                log.info("Loading configuration from file: {}", configFile.getAbsolutePath());
+
                 try (FileInputStream configStream = new FileInputStream(configFile)) {
                     properties.load(configStream);
                 } catch (IOException e) {
-                    log.error("Cannot read configuration file from path: "
-                            + configFile.getAbsolutePath(), e);
+                    log.error("Cannot read configuration file from path: " + configFile.getAbsolutePath(), e);
                 }
             }
         }
@@ -53,11 +49,8 @@ public class FileConfig {
         File configFile = getConfigurationFile();
         if (configFile != null) {
             
-            if (log.isDebugEnabled()) {
-                log.debug("Saving configuration to file: "
-                        + configFile.getAbsolutePath());
-            }
-            
+            log.info("Saving configuration to file: {}", configFile.getAbsolutePath());
+
             if (configFile.exists()) {
                 configFile.delete();                
             }
@@ -67,8 +60,7 @@ public class FileConfig {
                 fileOut.flush();
                 dirty = false;
             } catch (IOException e) {
-                log.error("Cannot write configuration to path "
-                        + configFile.getAbsolutePath(), e);
+                log.error("Cannot write configuration to path " + configFile.getAbsolutePath(), e);
             }
         }
     }
