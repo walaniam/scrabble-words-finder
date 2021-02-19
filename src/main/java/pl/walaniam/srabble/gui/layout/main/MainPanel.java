@@ -1,12 +1,12 @@
 package pl.walaniam.srabble.gui.layout.main;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.walaniam.srabble.model.Words;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.layout.DocumentListeningComboBoxModel;
 import pl.walaniam.srabble.gui.layout.LimitedLengthDocument;
 import pl.walaniam.srabble.gui.layout.MainFrame;
 import pl.walaniam.srabble.gui.layout.WordsListeningComboBoxModel;
+import pl.walaniam.srabble.model.Words;
 
 import javax.swing.*;
 import javax.swing.text.html.HTMLEditorKit;
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static pl.walaniam.srabble.gui.layout.LayoutComponents.constraintsOf;
 import static pl.walaniam.srabble.util.LetterGroupingUtils.groupByLength;
 
 @Slf4j
@@ -354,14 +355,11 @@ public class MainPanel extends JPanel {
     private void initBottomPanel() {
         bottomPanel.setLayout(new GridBagLayout());
         
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
+        GridBagConstraints c = constraintsOf(0, 0, 5, 10, 5, 15);
         c.weightx = 1;
-        c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5, 10, 5, 15);
-        
+
         bottomLabel.setText("");
         bottomPanel.add(bottomLabel, c);
     }
