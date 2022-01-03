@@ -1,4 +1,4 @@
-# scrabble-words
+# scrabble-words-finder
 
 # Dictionaries
 ## Polish
