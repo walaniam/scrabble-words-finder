@@ -5,14 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import pl.walaniam.srabble.gui.FileConfig;
 import pl.walaniam.srabble.gui.FrameUtils;
+import pl.walaniam.srabble.gui.actions.DictionaryChangedEvent;
 import pl.walaniam.srabble.gui.actions.LoadWordsWorker;
 import pl.walaniam.srabble.gui.actions.OpenFileAction;
-import pl.walaniam.srabble.gui.actions.WordsChangedEvent;
 import pl.walaniam.srabble.gui.i18n.I18N;
 import pl.walaniam.srabble.gui.laf.UICustomizer;
 import pl.walaniam.srabble.gui.layout.main.MainPanel;
 import pl.walaniam.srabble.gui.layout.start.StartPanel;
-import pl.walaniam.srabble.model.Words;
+import walaniam.scrabble.dictionary.Dictionary;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class MainFrame extends JFrame implements InitializingBean {
     private StartPanel startPanel;
     private JMenuBar menuBar;
     @Getter
-    private Words words;
+    private Dictionary dictionary;
     private volatile boolean frameIsBusy = false;
 
     public MainFrame(GlassPane glassPane, FileConfig fileConfig) {
@@ -204,9 +204,9 @@ public class MainFrame extends JFrame implements InitializingBean {
         }
     }
 
-    public void setWords(Words words) {
-        this.words = words;
-        fireWordsChangedEvent(new WordsChangedEvent(MainFrame.this, words));
+    public void setDictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
+        fireDictionaryChangedEvent(new DictionaryChangedEvent(MainFrame.this, dictionary));
     }
 
     @Override
@@ -226,8 +226,8 @@ public class MainFrame extends JFrame implements InitializingBean {
         wordsListeners.add(l);
     }
 
-    private void fireWordsChangedEvent(WordsChangedEvent e) {
+    private void fireDictionaryChangedEvent(DictionaryChangedEvent e) {
         log.debug("Fired WordsChangedEvent...");
-        wordsListeners.forEach(it -> it.wordsChanged(e));
+        wordsListeners.forEach(it -> it.dictionaryChanged(e));
     }
 }
