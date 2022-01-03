@@ -1,6 +1,6 @@
 package pl.walaniam.srabble.gui.layout;
 
-import pl.walaniam.srabble.gui.actions.WordsChangedEvent;
+import pl.walaniam.srabble.gui.actions.DictionaryChangedEvent;
 
 public interface WordsListener {
 
@@ -9,5 +9,5 @@ public interface WordsListener {
      * 
      * @param e
      */
-    void wordsChanged(WordsChangedEvent e);
+    void dictionaryChanged(DictionaryChangedEvent e);
 }

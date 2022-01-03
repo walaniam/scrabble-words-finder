@@ -2,17 +2,18 @@ package pl.walaniam.srabble.gui.layout.main;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.walaniam.srabble.gui.i18n.I18N;
+import pl.walaniam.srabble.gui.layout.DictionaryListeningComboBoxModel;
 import pl.walaniam.srabble.gui.layout.DocumentListeningComboBoxModel;
 import pl.walaniam.srabble.gui.layout.LimitedLengthDocument;
 import pl.walaniam.srabble.gui.layout.MainFrame;
-import pl.walaniam.srabble.gui.layout.WordsListeningComboBoxModel;
-import pl.walaniam.srabble.model.Words;
+import walaniam.scrabble.dictionary.Dictionary;
 
 import javax.swing.*;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,7 +111,7 @@ public class MainPanel extends JPanel {
         
         prefixWordLengthL.setText(I18N.getMessage("MainPanel.TopPanel.word.length"));
         
-        WordsListeningComboBoxModel prefixModel = new WordsListeningComboBoxModel(0);
+        DictionaryListeningComboBoxModel prefixModel = new DictionaryListeningComboBoxModel(0);
         this.mainFrame.addWordsListener(prefixModel);
         prefixWordLengthCB.setModel(prefixModel);
         
@@ -141,16 +142,18 @@ public class MainPanel extends JPanel {
         if (canSearch(prefix, 1)) {
             prefix = prefix.trim().toLowerCase();
             final Integer length = getSelectedInteger(prefixWordLengthCB.getSelectedItem());
-            final Words words = mainFrame.getWords();
+            final Dictionary dictionary = mainFrame.getDictionary();
             try {
                 mainFrame.setBusy(true);
-                List<String> foundWords = words.findStartingWith(prefix, length);
+                Collection<String> foundWords = dictionary.findStartingWith(prefix, length);
                 Map<Integer, List<String>> grouped = groupByLength(foundWords, Comparable::compareTo);
                 mainFrame.setBusy(false);
-                printSearchResult(grouped, mainFrame.getWords().getLongestWordLength());
+                printSearchResult(grouped, mainFrame.getDictionary().longestWordLength());
             } finally {
                 mainFrame.setBusy(false);
             }
+        } else {
+            log.debug("Prefix too short: {}", prefix);
         }
     }
     
@@ -173,10 +176,10 @@ public class MainPanel extends JPanel {
             lettersTxt = lettersTxt.trim().toLowerCase();
             int longest = lettersTxt.length();
             Integer length = getSelectedInteger(lettersWordLengthCB.getSelectedItem());
-            Words words = mainFrame.getWords();
+            Dictionary dictionary = mainFrame.getDictionary();;
             try {
                 mainFrame.setBusy(true);
-                Set<String> foundWords = words.findWords(lettersTxt, length);
+                Set<String> foundWords = dictionary.findWords(lettersTxt, length);
                 Map<Integer, List<String>> grouped = groupByLength(foundWords, Comparable::compareTo);
                 mainFrame.setBusy(false);
                 printSearchResult(grouped, longest);
@@ -385,6 +388,7 @@ public class MainPanel extends JPanel {
         public void keyPressed(KeyEvent e) {
             final Object source = e.getSource();
             if (KeyEvent.VK_ENTER == e.getKeyCode()) {
+                log.debug("Key listener source: {}", source);
                 if (source == lettersTF || source == searchWordsB) {
                     handleSearchWords();
                 } else if (source == lettersCleanB) {
