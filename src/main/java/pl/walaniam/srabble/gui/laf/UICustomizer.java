@@ -35,8 +35,10 @@ public class UICustomizer {
             Object value = UIManager.getDefaults().get(key);
             if (value instanceof FontUIResource) {
                 FontUIResource font = (FontUIResource) value;
-                UIManager.put(key, new FontUIResource(font.getName(), font
-                        .getStyle(), 11));
+                UIManager.put(
+                        key,
+                        new FontUIResource(font.getName(), font.getStyle(), 11)
+                );
             }
         }
     }

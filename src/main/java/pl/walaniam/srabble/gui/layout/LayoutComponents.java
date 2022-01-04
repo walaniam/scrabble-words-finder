@@ -1,7 +1,11 @@
 package pl.walaniam.srabble.gui.layout;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.awt.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LayoutComponents {
 
     public static GridBagConstraints constraintsOf(int gridX, int gridY) {

@@ -1,9 +1,13 @@
 package pl.walaniam.srabble.gui;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.swing.*;
 import java.awt.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FrameUtils {
     
     public static void center(Window window) {

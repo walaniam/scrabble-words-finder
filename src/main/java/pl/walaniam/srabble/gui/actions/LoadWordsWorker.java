@@ -10,8 +10,10 @@ import walaniam.scrabble.dictionary.Words;
 import walaniam.scrabble.dictionary.set.HashSetWords;
 
 import javax.swing.*;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -26,8 +28,8 @@ public class LoadWordsWorker extends SwingWorker<Dictionary, Object> {
     @Override
     protected Dictionary doInBackground() throws Exception {
         log.debug("START doInBackground for file {}", fileToOpen);
-        try (FileInputStream fis = new FileInputStream(fileToOpen)) {
-            Words words = HashSetWords.open(fis);
+        try (InputStream input = new BufferedInputStream(new FileInputStream(fileToOpen))) {
+            Words words = HashSetWords.open(input);
             Dictionary dictionary = new Dictionary(words);
             log.debug("END doInBackground");
             return dictionary;
